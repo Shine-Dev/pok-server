@@ -5,7 +5,7 @@ use bigdecimal::BigDecimal;
 #[derive(Debug, Serialize, Deserialize, Queryable, Identifiable)]
 #[table_name = "posts"]
 pub struct Post {
-    pub id: i32,
+    pub id: i64,
     pub title: String,
     pub content: String,
     pub latitude: BigDecimal,
@@ -27,8 +27,8 @@ pub struct NewPost<'a> {
 #[belongs_to(Post)]
 #[table_name = "comments"]
 pub struct Comment {
-    pub id: i32,
-    pub post_id: i32,
+    pub id: i64,
+    pub post_id: i64,
     pub content: String,
     pub created_at: chrono::NaiveDateTime,
 }
@@ -37,6 +37,6 @@ pub struct Comment {
 #[table_name = "comments"]
 pub struct NewComment<'a> {
     pub content: &'a str,
-    pub post_id: &'a i32,
+    pub post_id: &'a i64,
     pub created_at: chrono::NaiveDateTime,
 }

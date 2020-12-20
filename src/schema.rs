@@ -1,7 +1,7 @@
 table! {
     comments (id) {
-        id -> Int4,
-        post_id -> Int4,
+        id -> Int8,
+        post_id -> Int8,
         content -> Text,
         created_at -> Timestamp,
     }
@@ -9,7 +9,7 @@ table! {
 
 table! {
     posts (id) {
-        id -> Int4,
+        id -> Int8,
         title -> Text,
         content -> Text,
         latitude -> Numeric,
