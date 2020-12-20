@@ -11,10 +11,11 @@ use actix_web::{web, Error, HttpResponse};
 use diesel::dsl::insert_into;
 use serde::{Deserialize, Serialize};
 use std::vec::Vec;
+use crate::errors::ApiError;
 
 pub mod comments;
 
-const MAX_DISTANCE : &str = "10";
+const MAX_DISTANCE : &str = "20";
 
 sql_function!(
     fn haversine(
@@ -39,8 +40,8 @@ pub struct LocationData {
 }
 
 fn db_get_near_posts(
-    pool: &web::Data<Pool>, 
-    location: &web::Query<LocationData>
+    pool: web::Data<Pool>, 
+    location: web::Query<LocationData>
 ) -> Result<Vec<Post>, diesel::result::Error> 
 {
     let conn = pool.get().unwrap();
@@ -60,32 +61,32 @@ fn db_get_near_posts(
 pub async fn get_posts(
     db: web::Data<Pool>,
     location: web::Query<LocationData>
-) -> Result<HttpResponse, Error>
+) -> Result<HttpResponse, ApiError>
 {
-        Ok(
-            web::block(move || db_get_near_posts(&db, &location))
-                .await
-                .map(|post| HttpResponse::Ok().json(post))
-                .map_err(|_| HttpResponse::InternalServerError())?
-        )
+    Ok(
+       web::block(move || db_get_near_posts(db, location))
+            .await
+            .map(|post| HttpResponse::Ok().json(post))
+            .map_err(|_| ApiError::InternalServerError)?
+    )
 }
 
 pub async fn create_post(
     db: web::Data<Pool>,
     postdata: web::Json<PostData>
-) -> Result<HttpResponse, Error>
+) -> Result<HttpResponse, ApiError>
 {
     Ok(
-        web::block(move || db_create_post(&db, &postdata))
+        web::block(move || db_create_post(db, postdata))
             .await
             .map(|post| HttpResponse::Ok().json(post))
-            .map_err(|_| HttpResponse::InternalServerError())?
+            .map_err(|_| ApiError::InternalServerError)?
     )
 }
 
 fn db_create_post(
-    db: &web::Data<Pool>, 
-    postdata: &web::Json<PostData>
+    db: web::Data<Pool>, 
+    postdata: web::Json<PostData>
 ) -> Result<Post, diesel::result::Error>
 {
     let conn = db.get().unwrap();

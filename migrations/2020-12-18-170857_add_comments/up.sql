@@ -1,6 +1,8 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE comments (
-    id BIGSERIAL NOT NULL PRIMARY KEY,
-    post_id BIGINT NOT NULL,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    post_id UUID NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL,
     CONSTRAINT fk_post
