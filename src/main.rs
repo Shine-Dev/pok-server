@@ -32,7 +32,6 @@ async fn validator(req: ServiceRequest, credentials: BearerAuth) -> Result<Servi
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
-    std::env::set_var("RUST_LOG", "actix_web=debug");
     let database_url = environment::variables::expect_variable("DATABASE_URL");
 
     let manager = ConnectionManager::<PgConnection>::new(database_url);

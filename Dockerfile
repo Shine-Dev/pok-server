@@ -2,8 +2,8 @@
 ARG BASE_IMAGE=ekidd/rust-musl-builder:latest
 FROM ${BASE_IMAGE} AS builder
 
-ADD --chown=rust:rust . ./
 COPY * ./
+ADD --chown=rust:rust . ./
 RUN cargo build --release
 
 FROM alpine:latest
