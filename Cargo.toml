@@ -25,3 +25,7 @@ geoutils = "0.4.0"
 serde = {version = "1.0", features = ["derive"] }
 reqwest = { version = "0.10.6", features = ["blocking", "json"] }
 jsonwebtoken = "7.2.0"
+
+[[bin]]
+name = "pok-server"
+path = "src/main.rs"

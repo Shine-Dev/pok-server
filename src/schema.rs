@@ -12,8 +12,8 @@ table! {
         id -> Uuid,
         title -> Text,
         content -> Text,
-        latitude -> Numeric,
-        longitude -> Numeric,
+        latitude -> Float8,
+        longitude -> Float8,
         created_at -> Timestamp,
     }
 }

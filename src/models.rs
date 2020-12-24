@@ -1,6 +1,5 @@
 use crate::schema::*;
 use serde::{Deserialize, Serialize};
-use bigdecimal::BigDecimal;
 use uuid::Uuid;
 
 #[derive(Debug, Serialize, Deserialize, Queryable, Identifiable)]
@@ -9,8 +8,8 @@ pub struct Post {
     pub id: Uuid,
     pub title: String,
     pub content: String,
-    pub latitude: BigDecimal,
-    pub longitude: BigDecimal,
+    pub latitude: f64,
+    pub longitude: f64,
     pub created_at: chrono::NaiveDateTime,
 }
 
@@ -19,8 +18,8 @@ pub struct Post {
 pub struct NewPost<'a> {
     pub title: &'a str,
     pub content: &'a str,
-    pub latitude: &'a BigDecimal,
-    pub longitude: &'a BigDecimal,
+    pub latitude: &'a f64,
+    pub longitude: &'a f64,
     pub created_at: chrono::NaiveDateTime,
 }
 

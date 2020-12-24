@@ -1,11 +1,9 @@
-use bigdecimal::BigDecimal;
 use crate::models::{NewPost, Post};
 use crate::schema::posts::dsl::*;
 use crate::Pool;
 use crate::diesel::QueryDsl;
 use crate::diesel::RunQueryDsl;
 use crate::diesel::ExpressionMethods;
-use std::str::FromStr;
 use diesel::sql_types;
 use actix_web::{web, Error, HttpResponse};
 use diesel::dsl::insert_into;
@@ -15,15 +13,15 @@ use crate::errors::ApiError;
 
 pub mod comments;
 
-const MAX_DISTANCE : &str = "20";
+const MAX_DISTANCE : f64 = 20f64;
 
 sql_function!(
     fn haversine(
-        lat: sql_types::Numeric, 
-        lng: sql_types::Numeric, 
-        other_lat: sql_types::Numeric, 
-        other_lng: sql_types::Numeric
-    ) -> sql_types::Numeric
+        lat: sql_types::Double, 
+        lng: sql_types::Double, 
+        other_lat: sql_types::Double, 
+        other_lng: sql_types::Double
+    ) -> sql_types::Double
 );
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -35,8 +33,8 @@ pub struct PostData {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct LocationData {
-    pub latitude: BigDecimal,
-    pub longitude: BigDecimal,
+    pub latitude: f64,
+    pub longitude: f64,
 }
 
 fn db_get_near_posts(
@@ -53,7 +51,7 @@ fn db_get_near_posts(
                 &location.latitude, 
                 &location.longitude
             )
-            .le(BigDecimal::from_str(MAX_DISTANCE).unwrap())
+            .le(MAX_DISTANCE)
         )
         .load::<Post>(&conn)?)
 }

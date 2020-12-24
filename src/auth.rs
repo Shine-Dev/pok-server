@@ -50,17 +50,17 @@ fn get_kid(token: &str) -> Result<String, ApiError>{
     }
 }
 
-fn fetch_keys() -> Result<KeyList, Box<dyn Error>> {
+async fn fetch_keys() -> Result<KeyList, Box<dyn Error>>{
     let authority = environment::variables::expect_variable("AUTHORITY");
-    let http_response = reqwest::blocking::get(&authority)?;
-    Ok(http_response.json::<KeyList>()?)
+    let http_response = reqwest::get(&authority).await?;
+    Ok(http_response.json::<KeyList>().await?)
 }
 
-pub fn validate_token(token: &str) -> Result<TokenData<Claims>, ApiError> {
+pub async fn validate_token(token: &str) -> Result<TokenData<Claims>, ApiError> {
 
     let validation = create_validation();
 
-    let key_list = fetch_keys()
+    let key_list = fetch_keys().await
         .map_err(|_| ApiError::KeyFetchFetchError)?;
 
     let kid = get_kid(&token)?;
