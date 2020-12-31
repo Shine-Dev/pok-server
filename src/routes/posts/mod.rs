@@ -53,7 +53,7 @@ fn db_get_near_posts(
             )
             .le(MAX_DISTANCE)
         )
-        .load::<Post>(&conn)?)
+        .load::<Post>(&conn).unwrap())
 }
 
 pub async fn get_posts(

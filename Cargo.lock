@@ -1413,6 +1413,7 @@ dependencies = [
  "futures",
  "geoutils",
  "jsonwebtoken",
+ "openssl",
  "r2d2",
  "reqwest",
  "serde",
